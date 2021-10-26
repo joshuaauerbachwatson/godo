@@ -264,6 +264,26 @@ type AppServiceSpec struct {
 	Alerts        []*AppAlertSpec `json:"alerts,omitempty"`
 }
 
+// Struct describing the 'serverless' clause (experimental, not yet understood by the platform)
+// Likely to change radically as integration proceeds.
+type AppServerlessSpec struct {
+	// We support 'nim' projects in the local file system because we can.  It's unclear how this relates
+	// to the general assumptions of the app platform.
+	Local *LocalSourceSpec `json:"local,omitempty"`
+	// The GitHub case is consistent with the rest of the app platform.  We don't currently support 'GitLab'
+	// and 'Git' because 'nim' doesn't have logic for those cases.
+	GitHub *GitHubSourceSpec `json:"github,omitempty"`
+	// An optional path to the base of the Nimbella-style 'project' containing the actions
+	// This is a path relative to the LocalSourceSpec path or within the github repo.
+	// Note that the serverless clause deploys only the actions of the project.  Web content, if any is ignored.
+	// Web content should be covered by a static_sites clause.
+	SourceDir string `json:"source_dir,omitempty"`
+}
+
+type LocalSourceSpec struct {
+	Path string `json:"path"`
+}
+
 // AppServiceSpecHealthCheck struct for AppServiceSpecHealthCheck
 type AppServiceSpecHealthCheck struct {
 	// Deprecated. Use http_path instead.
@@ -294,6 +314,8 @@ type AppSpec struct {
 	Workers []*AppWorkerSpec `json:"workers,omitempty"`
 	// Pre and post deployment workloads which do not expose publicly-accessible HTTP routes.
 	Jobs []*AppJobSpec `json:"jobs,omitempty"`
+	// Serverless clause (experimental, handled specially for now)
+	Serverless []*AppServerlessSpec `json:"serverless,omitempty"`
 	// Database instances which can provide persistence to workloads within the application.
 	Databases []*AppDatabaseSpec `json:"databases,omitempty"`
 	// A set of hostnames where the application will be available.
