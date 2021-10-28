@@ -1,8 +1,9 @@
-module github.com/digitalocean/godo
+module github.com/joshuaauerbachwatson/godo
 
 go 1.16
 
 require (
+	github.com/digitalocean/godo v1.69.1
 	github.com/golang/protobuf v1.3.5 // indirect
 	github.com/google/go-querystring v1.0.0
 	github.com/stretchr/testify v1.4.0
